@@ -90,6 +90,7 @@ class TasksController extends Controller {
    * @return \Illuminate\Http\JsonResponse
    */
   public function update(Request $request, $id) {
+    // dd($request->all());
     $validator = Validator::make($request->input(), $this->rules);
 
     if ($validator->fails()) {
@@ -146,8 +147,13 @@ class TasksController extends Controller {
         $task->edit($request->all());
       }
     }
+    else {
+      $taskUpdate = Task::find($task->id);
+      $data = array();
+      $data['status'] = $request->status;
+      $taskUpdate->edit($data);
+    }
     
-
     $card = view('partials.tasks.card')->with('task', $task)->render();
 
     return response()->json([
